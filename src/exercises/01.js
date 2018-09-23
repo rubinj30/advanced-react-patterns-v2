@@ -12,10 +12,10 @@ class Toggle extends React.Component {
   // which will update the `on` state and call the `onToggle` prop
   // with the new `on` state.
   toggle = () => {
-    console.log('toggling');
-    this.setState((prevState) => {
-      return {on: !prevState.on}
-    })
+    this.setState(
+      (prevState) => ({on: !prevState.on}), 
+      this.props.onToggle(this.state.on)
+    )
   }
   // 💰 this.setState(newState, callback)
   //
