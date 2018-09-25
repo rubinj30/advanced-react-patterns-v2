@@ -4,6 +4,11 @@ import React from 'react'
 import {Switch} from '../switch'
 
 class Toggle extends React.Component {
+  static On = ({on, children}) => (on ? children : null)
+  static Off = ({on, children}) => (on ? null : children)
+  static Button = ({on, children, ...props}) => (
+    <Switch onClick={props.toggle} on={on} />
+  )
   // you can create function components as static properties!
   // for example:
   // static Candy = (props) => <div>CANDY! {props.children}</div>
@@ -22,7 +27,12 @@ class Toggle extends React.Component {
       ({on}) => ({on: !on}),
       () => this.props.onToggle(this.state.on),
     )
+
   render() {
+    console.log('test', this.props.children)
+    // what is a situation for when i'd need to use .count ??
+    console.log('count', React.Children.count(this.props.children))
+    console.log(this.props.children.length)
     // we're trying to let people render the components they want within the Toggle component.
     // But the On, Off, and Button components will need access to the internal `on` state as
     // well as the internal `toggle` function for them to work properly. So here we can
@@ -33,8 +43,14 @@ class Toggle extends React.Component {
     // 2. React.cloneElement: https://reactjs.org/docs/react-api.html#cloneelement
     //
     // 🐨 you'll want to completely replace the code below with the above logic.
-    const {on} = this.state
-    return <Switch on={on} onClick={this.toggle} />
+    // React.Children.map(children, )
+
+    return React.Children.map(this.props.children, child => {
+      return React.cloneElement(child, {
+        on: this.state.on,
+        toggle: this.toggle,
+      })
+    })
   }
 }
 
